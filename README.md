@@ -11,13 +11,13 @@ A `malha` e o `z_buffer` são reiniciados e os ângulos de rotação são increm
 
 >Simplificando para sermos mais didáticos: se rotacionarmos o cubo em 30° no eixo $x$ a cada momento (indicado por $t_i$), os frames do cubo serão:
 >
->$$
->t_0 = [1, 1, 1]
->\\
->t_1 = [30°, 1, 1]
->\\
->t_2 = [60°, 1, 1]
->$$
+> $$
+> \begin{align*}
+> t_0 = [1, 1, 1] \\
+> t_1 = [30°, 1, 1]\\
+> t_2 = [60°, 1, 1] \\
+> \end{align*}
+> $$
 
 O que é feito no algorítmo é obter $t_0$ e rotacionar ele a partir de um ângulo que é incrementado a cada momento.
 
@@ -30,9 +30,9 @@ A `malha` é o buffer que é onde é feito as transformações matriciais e as r
 ### Z-buffer
 É utilizado um buffer adicional que data a profundidade de cada pixel na `malha`, o `z_buffer`. A z-bufferização é uma técnica simples de computação gráfica que anota o quão perto os objetos da imagem estão.
 
-No projeto, os pixels dos objetos mais longes estão como 0 e quanto maior a coordenada z de um pixel (aqui são pontos das faces do cubo), mais proximo do observador este pixel está. 
+No projeto, os pixels dos objetos mais longes estão como $0$ e quanto maior a coordenada $z$ de um pixel (aqui são pontos das faces do cubo), mais proximo do observador este pixel está. 
 
-Se dois objetos tem a mesma coordenada em (x,y), aparecerá o pixel do objeto mais próximo (quem tiver a coordenada z maior, aparece).
+Se dois objetos tem a mesma coordenada em $(x,y)$, aparecerá o pixel do objeto mais próximo (quem tiver a maior coordenada $z$ , aparece).
 
 ```c
 void insere_ascii(char* buffer, int coord, char c) {
@@ -90,13 +90,13 @@ void transforma_malha(char* buffer, t_TrigValues* cos_senos) {
 ```
 "Como assim ditam qual face está sendo calculada?". 
 
-Bem, se o lado esquerdo da face frontal é por exemplo em x=2, concordemos que a face esquerda é uma linha reta horizontal do ponto de perspectiva do observador, e em todos os pontos, o seu valor em x é 2 também.
+Bem, se o lado esquerdo da face frontal é por exemplo em $x=2$, concordemos que a face esquerda é uma linha reta horizontal do ponto de perspectiva do observador, e em todos os pontos, o seu valor em $x$ é $2$ também.
 
 Ilustrando:
 
 ![Um espaço cartesiano em que demostra que a face esquerda é constante no eixo x](image.png)
 
-A face h está constante no eixo x, o que muda apenas é apenas suas coordenadas em y e z.
+A face $h$ está constante no eixo $x$, o que muda apenas é apenas suas coordenadas em $y$ e $z$.
 O seguite trecho de código demostra o cálculo disso: `-LARGURA` é a posição em que começa a face esquerda
 
 ```c
@@ -104,6 +104,7 @@ O seguite trecho de código demostra o cálculo disso: `-LARGURA` é a posição
             insere_ascii(buffer, coord, '?');
 ```
 ![Um espaço 3D que demostra que a face esquerda é constante no eixo x](image-3.png)
+
 Uma visualização em 3 dimensões para complementar. A face esquerda é a [D,E,H,A].
 
 ### A função gira_coord()
@@ -112,20 +113,19 @@ Uma visualização em 3 dimensões para complementar. A face esquerda é a [D,E,
 Ao final da função, é feito a adaptação com os offsets, fazendo o deslocamento dos pixels para o centro da tela.
 
 A matriz de rotaçao usada foi essa:
-$$
+
+```math
 \begin{bmatrix}
-x \\ y \\ z 
+x \\\ y \\\ z
 \end{bmatrix}
+
 =
 \begin{bmatrix}
-    \cos(\beta)  \cos(\gamma)  x + \cos(\beta)  \sin(\gamma)  y - \sin(\beta)  z
- \\
-      (-\cos(\alpha)  \sin(\gamma) + \sin(\alpha)  \sin(\beta)  \cos(\gamma))  x + (\cos(\alpha)  \cos(\gamma) + \sin(\alpha)  \sin(\beta)  \sin(\gamma))  y + \sin(\alpha)  \cos(\beta)  z
-\\
-      (\sin_(\alpha)  \sin(\gamma) + \cos(\alpha)  \sin(\beta)  \cos(\gamma))  x + (-(\sin(\alpha)  \cos(\gamma)) + \cos(\alpha)  \sin(\beta)  \sin(\gamma))  y + \cos(\alpha)  \cos(\beta)z
-
+\cos(\beta) \cos(\gamma) x + \cos(\beta) \sin(\gamma) y - \sin(\beta) z \\
+(-\cos(\alpha) \sin(\gamma) + \sin(\alpha) \sin(\beta) \cos(\gamma)) x + (\cos(\alpha) \cos(\gamma) + \sin(\alpha) \sin(\beta) \sin(\gamma)) y + \sin(\alpha) \cos(\beta) z \\
+(\sin(\alpha) \sin(\gamma) + \cos(\alpha) \sin(\beta) \cos(\gamma)) x + (-(\sin(\alpha) \cos(\gamma)) + \cos(\alpha) \sin(\beta) \sin(\gamma)) y + \cos(\alpha) \cos(\beta)z
 \end{bmatrix}
-$$
+```
 
 ## Como compilar
 Caso queira compilar o executavel, é necessário que tenha um compilador de c disponível. De preferência gcc.
