@@ -2,6 +2,8 @@
 
 O seguinte projeto simula uma rotação de um cubo em 3 dimensões no terminal. Sendo que cada face possui um valor ASCII diferente das demais.
 
+![animação do programa](cubo.gif)
+
 ## Como é feito
 
 O buffer onde tudo acontece, a `malha`, é inicializado e se multiplica  cada face por uma matriz de rotação. Se sobressai no frame final, as faces com o maior z em cada ponto $x$ e $y$ (aqui é usado `z-bufferização`).
